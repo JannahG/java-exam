@@ -24,14 +24,10 @@ public class CustomerService {
     public Customer createCustomer(Customer customer) {
         var customerRepo = customerRepository.save(customer);
 
-        var acctType = customer.getAccountType();
-        var desc = acctType.getDescription();
-
         Account account = new Account();
         account.setAccountNumber(generateAccountNumber());
-//        account.setAccountType(customer.getAccountType().getDescription());
-        account.setAccountType(desc);
-        account.setAvailableBalance(500.00);
+        account.setAccountType(customer.getAccountType().getDescription());
+        account.setAvailableBalance(generateAccountBalance());
         account.setCustomer(customer);
 
         accountRepository.save(account);
@@ -66,5 +62,9 @@ public class CustomerService {
 
     private long generateAccountNumber() {
         return (long) (Math.random() * 10000);
+    }
+
+    private long generateAccountBalance() {
+        return (long) (Math.random() * 20000);
     }
 }
