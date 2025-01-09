@@ -11,8 +11,7 @@ public enum AccountType {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return this.name() + ": " + description;
+    public String getDescription() {
+        return description;
     }
 }

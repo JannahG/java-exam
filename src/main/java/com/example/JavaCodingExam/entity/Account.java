@@ -7,17 +7,14 @@ public class Account {
 
     @Id
     private long accountNumber;
-
-    @Enumerated(EnumType.STRING)
-    private AccountType accountType;
-
+    private String accountType;
     private double availableBalance;
 
     @ManyToOne
     @JoinColumn(name = "customer_number")
     private Customer customer;
 
-    public AccountType getAccountType() {
+    public String getAccountType() {
         return accountType;
     }
 
@@ -27,5 +24,21 @@ public class Account {
 
     public long getAccountNumber() {
         return accountNumber;
+    }
+
+    public void setAccountNumber(long accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public void setAvailableBalance(double availableBalance) {
+        this.availableBalance = availableBalance;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

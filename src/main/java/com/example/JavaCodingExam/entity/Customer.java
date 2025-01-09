@@ -14,6 +14,7 @@ public class Customer {
     private String address1;
     private String address2;
     private AccountType accountType;
+
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Account> accounts;
 

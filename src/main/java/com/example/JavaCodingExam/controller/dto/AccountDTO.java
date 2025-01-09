@@ -1,5 +1,7 @@
 package com.example.JavaCodingExam.controller.dto;
 
+import com.example.JavaCodingExam.entity.AccountType;
+
 public class AccountDTO {
 
     private long accountNumber;

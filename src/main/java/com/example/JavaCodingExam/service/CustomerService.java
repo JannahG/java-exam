@@ -3,13 +3,14 @@ package com.example.JavaCodingExam.service;
 import com.example.JavaCodingExam.controller.dto.AccountDTO;
 import com.example.JavaCodingExam.controller.dto.CustomerDTO;
 import com.example.JavaCodingExam.entity.Account;
+import com.example.JavaCodingExam.entity.AccountType;
 import com.example.JavaCodingExam.entity.Customer;
+import com.example.JavaCodingExam.repository.AccountRepository;
 import com.example.JavaCodingExam.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -17,8 +18,24 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
     public Customer createCustomer(Customer customer) {
-        return customerRepository.save(customer);
+        var customerRepo = customerRepository.save(customer);
+
+        var acctType = customer.getAccountType();
+        var desc = acctType.getDescription();
+
+        Account account = new Account();
+        account.setAccountNumber(generateAccountNumber());
+//        account.setAccountType(customer.getAccountType().getDescription());
+        account.setAccountType(desc);
+        account.setAvailableBalance(500.00);
+        account.setCustomer(customer);
+
+        accountRepository.save(account);
+        return customerRepo;
     }
 
     public CustomerDTO getCustomer(int customerNumber) {
@@ -28,17 +45,13 @@ public class CustomerService {
             return null;
         }
 
-        List<Account> accounts = customer.getAccounts();
-
-        List<Account> filteredAccounts = accounts.stream()
-                .filter(account -> account.getAccountType() == customer.getAccountType())
+        List<AccountDTO> accountResponses = customer.getAccounts().stream()
+                .map(account -> new AccountDTO(
+                        account.getAccountNumber(),
+                        account.getAccountType(),
+                        account.getAvailableBalance()
+                ))
                 .toList();
-
-        List<AccountDTO> accountResponses = filteredAccounts.stream()
-                .map(account -> new AccountDTO(account.getAccountNumber(),
-                        account.getAccountType().toString(),
-                        account.getAvailableBalance()))
-                .collect(Collectors.toList());
 
         return new CustomerDTO(
                 customer.getCustomerNumber(),
@@ -49,5 +62,9 @@ public class CustomerService {
                 customer.getAddress2(),
                 accountResponses
         );
+    }
+
+    private long generateAccountNumber() {
+        return (long) (Math.random() * 10000);
     }
 }
