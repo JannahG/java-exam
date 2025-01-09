@@ -5,7 +5,6 @@ import java.util.List;
 
 @Entity
 public class Customer {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int customerNumber;
@@ -55,7 +54,7 @@ public class Customer {
     }
 
     public void setAddress1(String address1) {
-        this.address1 = address2;
+        this.address1 = address1;
     }
 
     public String getAddress2() {
